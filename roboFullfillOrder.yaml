@@ -1,18 +1,18 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: roboFullFillOrder
+  name: robofullfillorder
   labels:
-    run: roboFullFillOrder
+    run: robofullfillorder
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        run: roboFullFillOrder
+        run: robofullfillorder
     spec:
       containers:
-      - name: roboFullFillOrder
+      - name: robofullfillorder
         image: sabbour/fulfillorderack:latest
         imagePullPolicy: Always
         ports:
@@ -30,12 +30,12 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: roboFullFillOrderService
+  name: robofullfillorderservice
   annotations:
      service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
-    app: roboFullFillOrder-service
+    app: robofullfillorderservice
   ports:
   - protocol: TCP
     port: 80
