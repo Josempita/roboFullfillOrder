@@ -24,5 +24,15 @@ spec:
           value: ROBO-CLUSTERS
         - name: MONGOURL
           value: mongodb://robo-dev-cosmos-db:qLL3oTfiz9vrv8LbyD6Rld1kmDUbMwkSdhfVQgZXsTmQ9OmRXrhKHmADGpujz6sfUyVkMuJP9PoltOTNFb2bQQ==@robo-dev-cosmos-db.documents.azure.com:10255/?ssl=true&replicaSet=globaldb
-
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fulfill-service
+spec:
+  selector:
+    run: robofullfillorder
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
