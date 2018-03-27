@@ -23,7 +23,7 @@ spec:
         - name: TEAMNAME
           value: ROBO-CLUSTERS
         - name: MONGOURL
-          value: "mongodb://[mongoinstance].[namespace]"
+          value: mongodb://$(MONGODB_URL):$(MONGODB_PORT)
  
 ---
  
@@ -35,13 +35,13 @@ metadata:
      service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
-    app: roboFullFillOrder-service
+    app: roboFullFillOrderService
   ports:
   - protocol: TCP
-    port: 80
-    targetPort: 9376
-  clusterIP: 0.0.0.1
-  loadBalancerIP: 0.0.0.1
+    port: 443
+    targetPort: $(TARGET_PORT)
+  clusterIP: $(CLUSTER_IP)
+  loadBalancerIP: $(LOAD_BALANCER_IP)
   type: LoadBalancer
 status:
   loadBalancer:
