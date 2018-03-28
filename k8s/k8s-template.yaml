@@ -1,0 +1,69 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: azurefile
+provisioner: kubernetes.io/azure-file
+mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
+parameters:
+  skuName: Standard_LRS
+  storageAccount: robotttstorage
+---
+apiVersion: v1 
+kind: PersistentVolumeClaim 
+metadata: 
+  name: azurefileclaim
+spec: 
+  accessModes: 
+    - ReadWriteOnce 
+  storageClassName: azurefile 
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: robofullfillorder
+  labels:
+    run: robofullfillorder
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: robofullfillorder
+    spec:
+      containers:
+      - name: robofullfillorder
+        image: sabbour/fulfillorderack:latest
+        imagePullPolicy: Always
+        ports:
+          - name: port1
+            containerPort: 5672
+            protocol: TCP
+        env:
+        - name: TEAMNAME
+          value: ROBO-CLUSTERS
+        - name: MONGOURL
+          value: MONGO-URL
+        volumeMounts:
+        - name: azurevol
+          mountPath: /orders
+      volumes:
+        - name: azurevol
+          persistentVolumeClaim:
+            claimName: azurefileclaim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fulfill-service
+spec:
+  selector:
+    run: robofullfillorder
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
