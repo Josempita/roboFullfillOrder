@@ -47,11 +47,7 @@ spec:
         - name: TEAMNAME
           value: ROBO-CLUSTERS
         - name: MONGOURL
-<<<<<<< HEAD
-          value: mongodb://$(MONGODB_URL):$(MONGODB_PORT)
- 
-=======
-          value: mongodb://robo-dev-cosmos-db:qLL3oTfiz9vrv8LbyD6Rld1kmDUbMwkSdhfVQgZXsTmQ9OmRXrhKHmADGpujz6sfUyVkMuJP9PoltOTNFb2bQQ==@robo-dev-cosmos-db.documents.azure.com:10255/?ssl=true&replicaSet=globaldb
+          value: MONGO-URL
         volumeMounts:
         - name: azurevol
           mountPath: /orders
@@ -59,7 +55,6 @@ spec:
         - name: azurevol
           persistentVolumeClaim:
             claimName: azurefileclaim
->>>>>>> robo-dev
 ---
 apiVersion: v1
 kind: Service
@@ -67,23 +62,8 @@ metadata:
   name: fulfill-service
 spec:
   selector:
-<<<<<<< HEAD
-    app: roboFullFillOrderService
-  ports:
-  - protocol: TCP
-    port: 443
-    targetPort: $(TARGET_PORT)
-  clusterIP: $(CLUSTER_IP)
-  loadBalancerIP: $(LOAD_BALANCER_IP)
-  type: LoadBalancer
-status:
-  loadBalancer:
-    ingress:
-    - ip: 0.0.0.1
-=======
     run: robofullfillorder
   ports:
     - protocol: TCP
       port: 8080
       targetPort: 8080
->>>>>>> robo-dev

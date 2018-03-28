@@ -1,0 +1,49 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: robofullfillorder
+  labels:
+    run: robofullfillorder
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: robofullfillorder
+    spec:
+      containers:
+      - name: robofullfillorder
+        image: sabbour/fulfillorderack:latest
+        imagePullPolicy: Always
+        ports:
+          - name: port1
+            containerPort: 5672
+            protocol: TCP
+        env:
+        - name: TEAMNAME
+          value: ROBO-CLUSTERS
+        - name: MONGOURL
+          value: "mongodb://[mongoinstance].[namespace]"
+ 
+---
+ 
+kind: Service
+apiVersion: v1
+metadata:
+  name: robofullfillorderservice
+  annotations:
+     service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  selector:
+    app: robofullfillorderservice
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 9376
+  clusterIP: 0.0.0.1
+  loadBalancerIP: 0.0.0.1
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 0.0.0.1
