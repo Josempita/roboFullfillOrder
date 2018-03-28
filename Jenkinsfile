@@ -37,7 +37,7 @@ node {
     // Roll out to production
     case "robo-prod":
         // Change deployed image in canary to the one we just built
-        sh("sed -i.bak 's#MONGO-URL#${devMongoURL}#' ./k8s/*.yaml")
+        sh("sed -i.bak 's#MONGO-URL#${prodMongoURL}#' ./k8s/*.yaml")
         //sh("sed -i.bak 's#EVENTHUB-PATH#${prodEventHubPath}#' ./k8s/*.yaml")
         //sh("sed -i.bak 's#PROCESS-ENDPOINT#${prodProcessEndpoint}#' ./k8s/*.yaml")
         sh("kubectl --kubeconfig=/var/kube/config --namespace=robo-prod apply -f k8s/")
